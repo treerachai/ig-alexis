@@ -1,0 +1,19 @@
+{
+  "name": "alexis",
+  "version": "0.0.3",
+  "description": "",
+  "bin": {
+    "ig": "bin/ig"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "minimist": "^1.2.0",
+    "nightmare": "^2.10.0",
+    "prompt": "^1.0.0"
+  }
+}
