@@ -12,10 +12,13 @@ instagram auto love and comment
 -n  , number of images, default all
 -d  , love and comment delay in ms, default 3000ms
 -c  , comment <String> default no
+-s  --story, story
 
 ig [login|logout|username] [options]
 
 example:
 
-ig alfathdirk -n 10 -c "test comment"
+ig alfathdirk -n 10 -c "test comment" //for love 10 photo and comment 
+ig alfathdirk --story // view url story ig
+
 ```

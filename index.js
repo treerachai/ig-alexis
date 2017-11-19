@@ -79,7 +79,7 @@ module.exports = (arg)  => {
       logout();
       break;
     default:
-      instagram.exec(arg)
+        instagram.exec(arg)
       break;
   }
 }

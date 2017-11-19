@@ -46,11 +46,30 @@ class Instagram {
     this.sessionID = sessionID;
     this.csrftoken = csrftoken;
 
+    let story = argv.story || argv.s;
     let cmd = `curl '${host}/${username}/?__a=1' -H 'pragma: no-cache' -H 'accept-encoding: gzip, deflate, br' -H 'accept-language: en-US,en;q=0.9' -H 'upgrade-insecure-requests: 1' -H 'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36' -H 'accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8' -H 'cache-control: no-cache' -H 'authority: www.instagram.com' -H 'cookie: sessionid=${sessionID}' -H 'save-data: on' --compressed`
+
     exec(cmd,(err, sto) => {
         try {
             let response = JSON.parse(sto);
             let { nodes, page_info, count } = response.user.media;
+            if (story) {
+              let storycmd = `curl '${host}/graphql/query/?query_id=17873473675158481&variables=%7B%22reel_ids%22%3A%5B%22${response.user.id}%22%5D%2C%22precomposed_overlay%22%3Afalse%7D' -H 'pragma: no-cache' -H 'cookie: sessionid=${sessionID}' -H 'accept-encoding: gzip, deflate, br' -H 'accept-language: en-US,en;q=0.9' -H 'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36' -H 'accept: */*' -H 'cache-control: no-cache' -H 'authority: www.instagram.com' -H 'x-requested-with: XMLHttpRequest' -H 'referer: https://www.instagram.com/' -H 'save-data: on' --compressed`
+              exec(storycmd, (err, sto) => {
+                let { data } = JSON.parse(sto);
+                if(data.reels_media.length > 0) {
+                  let { items } = data.reels_media[0];
+                  for (let i = 0; i < items.length; i++) {
+                    if(items[i].is_video) {
+                      console.log(items[i].video_resources[1].src);
+                    } else {
+                      console.log(items[i].display_resources[1].src);
+                    }
+                  }
+                }
+              })
+              return;
+            }
             let tot = argv.n || count;
             let date = ((tot * this.delay  + 2000) / 1000 ) / 60;
             console.log(`Estimated like and comment ${date.toFixed(3)} minutes`);
@@ -71,7 +90,7 @@ class Instagram {
           console.log(`media #${id} disable comment`);
           return;
       }
-      let cmd = `curl '${host}/web/comments/${id}/add/' -H 'cookie: sessionid=${this.sessionID}' -H 'origin: ${host}' -H 'accept-encoding: gzip, deflate, br' -H 'accept-language: en-US,en;q=0.9' -H 'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36' -H 'x-requested-with: XMLHttpRequest' -H 'save-data: on' -H 'x-csrftoken: ${this.csrftoken}' -H 'pragma: no-cache' -H 'x-instagram-ajax: 1' -H 'content-type: application/x-www-form-urlencoded' -H 'accept: */*' -H 'cache-control: no-cache' -H 'authority: www.instagram.com' -H 'referer: ${host}/p/${code}/?taken-by=${process.argv.slice(3)[0]}' --data 'comment_text=${comment}' --compressed`;
+      let cmd = `curl '${host}/web/comments/${id}/add/' -H 'cookie: sessionid=${this.sessionID};csrftoken=${this.csrftoken};' -H 'origin: ${host}' -H 'accept-encoding: gzip, deflate, br' -H 'accept-language: en-US,en;q=0.9' -H 'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36' -H 'x-requested-with: XMLHttpRequest' -H 'save-data: on' -H 'x-csrftoken: ${this.csrftoken}' -H 'pragma: no-cache' -H 'x-instagram-ajax: 1' -H 'content-type: application/x-www-form-urlencoded' -H 'accept: */*' -H 'cache-control: no-cache' -H 'authority: www.instagram.com' -H 'referer: ${host}/p/${code}/?taken-by=${process.argv.slice(3)[0]}' --data 'comment_text=${comment}' --compressed`;
       exec(cmd, (err, sto) => {
           if(err) {
               console.log(err);
@@ -97,7 +116,7 @@ class Instagram {
               console.log(`Like Done in ${date.toFixed(3)} Minutes!`);
               return;
           }
-          let commandLike = `curl '${host}/web/likes/${idPoto[i]}/like/' -X POST -H 'cookie: sessionid=${this.sessionID}' -H 'origin: ${host}' -H 'accept-encoding: gzip, deflate, br' -H 'accept-language: en-US,en;q=0.9' -H 'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36' -H 'x-requested-with: XMLHttpRequest' -H 'save-data: on' -H 'x-csrftoken: ${this.csrftoken}' -H 'pragma: no-cache' -H 'x-instagram-ajax: 1' -H 'content-type: application/x-www-form-urlencoded' -H 'accept: */*' -H 'cache-control: no-cache' -H 'authority: www.instagram.com' -H 'referer: ${host}/' -H 'content-length: 0' --compressed`
+          let commandLike = `curl '${host}/web/likes/${idPoto[i]}/like/' -X POST -H 'cookie: sessionid=${this.sessionID};csrftoken=${this.csrftoken};' -H 'origin: ${host}' -H 'accept-encoding: gzip, deflate, br' -H 'accept-language: en-US,en;q=0.9' -H 'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36' -H 'x-requested-with: XMLHttpRequest' -H 'save-data: on' -H 'x-csrftoken: ${this.csrftoken}' -H 'pragma: no-cache' -H 'x-instagram-ajax: 1' -H 'content-type: application/x-www-form-urlencoded' -H 'accept: */*' -H 'cache-control: no-cache' -H 'authority: www.instagram.com' -H 'referer: ${host}/' -H 'content-length: 0' --compressed`
           exec(commandLike,function(e,so,si) {
               if(!e){
                   console.log('Like =>',idPoto[i])

@@ -5,7 +5,7 @@ let app = require('../index.js');
 try {
   app(argv);
 } catch (error) {
-
+  console.log(error);
   console.log("\x1b[31m",`\nSession Time Out , please login first by typing 'ig login'`)
   let helpMessage = `
 instagram auto love and comment
