@@ -1,24 +1,59 @@
-# ig-alexis
-this for fun
+## How to work with alexis
 
-## Install
+### Login IG alexis
 
-`npm -g i alexis`
+```javascript
+let Ig = require('alexis');
+
+/* login by pass */
+let ig = new Ig();
+ig.getSession({ username: 'username', password: 'password' }, result => {
+  console.log(result);
+})
+
+/* Or login by session */
+let ig = new Ig({ sessionID, csrfToken });
+
+})    
+    
+```
+
+### Actions
+```javascript
+
+  (async() => {
+    
+    /* get your tl media */
+      let x = ig.getTimeLineMedia();
+    /* end of get */
+    
+    /* get MediaByUserName */
+      let x = await ig.getMediaByUserName('alfathdirk', { limit: 24 });
+    /* end of get */
+    
+    /* like media */
+      ig.likeMedia('1617391803554904915');
+    /* end like media */
+    
+    /* for comment */
+      let ob = {
+          id: '860417844570038475',
+          code: 'vw0XiQASDLAOyz7qynA06nBTTARSd2hiesmWE0' ,
+        }
+      ig.commentMedia(ob, 'test');
+    /* end comment */
+    
+    /* get story  */
+      let x = await ig.story('alfathdirk')
+    /* end story  */
+    
+    /* get media ID by url */
+      let x = await ig.getMediaId('https://www.instagram.com/p/BcWb-2XA1uw/')
+    /* end media  */
+    //   console.log(x);
+    })()
 
 ```
-instagram auto love and comment
 
-=== options ===
--n  , number of images, default all
--d  , love and comment delay in ms, default 3000ms
--c  , comment <String> default no
--s  --story, story
-
-ig [login|logout|username] [options]
-
-example:
-
-ig alfathdirk -n 10 -c "test comment" //for love 10 photo and comment 
-ig alfathdirk --story // view url story ig
-
-```
+## Author
+@alfathdirk
