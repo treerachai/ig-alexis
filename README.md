@@ -1,4 +1,7 @@
 ## How to work with alexis
+```bash
+npm i alexis
+```
 
 ### Login IG alexis
 
