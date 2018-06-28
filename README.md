@@ -11,8 +11,6 @@ npm i alexis
 ```javascript
 let Ig = require('alexis');
 
-/* login by pass */
-let ig = new Ig();
 
 /* Or login by session */
 let ig = new Ig({ sessionID, csrfToken });
@@ -23,6 +21,8 @@ let ig = new Ig({ sessionID, csrfToken });
 ### Actions
 ```javascript
 
+  let ig = new Ig();
+  
   (async() => {
     /* login */
      let x = await ig.loginByPassword({ username: 'your uname', password: 'password' })
