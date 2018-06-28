@@ -1,3 +1,6 @@
+## Preview
+![image](https://i.imgur.com/oyh1lxM.gif)
+
 ## How to work with alexis
 ```bash
 npm i alexis
