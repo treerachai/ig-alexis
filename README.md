@@ -13,14 +13,10 @@ let Ig = require('alexis');
 
 /* login by pass */
 let ig = new Ig();
-ig.getSession({ username: 'username', password: 'password' }, result => {
-  console.log(result);
-})
 
 /* Or login by session */
 let ig = new Ig({ sessionID, csrfToken });
-
-})    
+ 
     
 ```
 
@@ -28,7 +24,9 @@ let ig = new Ig({ sessionID, csrfToken });
 ```javascript
 
   (async() => {
-    
+    /* login */
+     let x = await ig.loginByPassword({ username: 'your uname', password: 'password' })
+
     /* get your tl media */
       let x = ig.getTimeLineMedia();
     /* end of get */
