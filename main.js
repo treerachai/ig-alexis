@@ -1,7 +1,3 @@
-let exec = require('child_process').exec;
-const fs = require('fs');
-const prompt = require('prompt');
-
 const InstagramAPI = require('./lib/instagram');
 
 class Instagram extends InstagramAPI{

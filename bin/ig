@@ -1,0 +1,92 @@
+#!/usr/bin/env node
+
+let Ig = require('../main');
+let prompt = require('prompt');
+let fs = require('fs');
+let argv = require('minimist')(process.argv.slice(2));
+
+class Cli extends Ig {
+
+  constructor(arg, auth) {
+    super(auth);
+    let { user, count, story, download, _ } = argv;
+    this.state = {
+      _,
+      user,
+      count,
+      story,
+      download,
+    };
+
+    if(_.length > 0) {
+      this.command('login', this.login.bind(this));
+      this.command('logout', this.logout.bind(this));
+    }
+    if(auth) {
+      this.controller();
+    }
+  }
+
+
+  async controller() {
+    let { count, user, story, download } = this.state;
+    let result;
+    if(user) {
+      if(count) {
+        result = await this.getMediaByUserName(user, { limit: count });
+      }
+      if(story) {
+        result = await this.story(user);
+      }
+      console.log(result);
+    }
+
+  }
+
+  command(arg, fn) {
+    if(this.state._[0] === arg) {
+      fn();
+    }
+  }
+
+  logout() {
+    console.log('logout');
+  }
+
+  login() {
+    prompt.start();
+    prompt.get([{
+      name: 'username',
+      required: true,
+    },{
+      name: 'password',
+      description: 'Password',
+      type: 'string',
+      hidden: true,
+      replace: '*',
+      required: true,
+    }], async (err, credentials) => {
+      try {
+        let result = await this.loginByPassword(credentials);
+        fs.writeFileSync('users.json', JSON.stringify(result, 0, 2), 'utf-8' );
+        console.log(`Success Login as ${credentials.username}!!`);
+      } catch(err) {
+        console.error(err);
+      }
+    })
+  }
+}
+
+let cli = (arg) => {
+  let auth;
+  fs.exists('users.json',(res) => {
+    if(res) {
+      auth = JSON.parse(fs.readFileSync('users.json','utf-8'));
+    } else {
+      console.log('Please Login');
+    }
+    new Cli(arg, auth);
+  });
+}
+
+cli(argv);
