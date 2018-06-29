@@ -1,3 +1,6 @@
+## Preview
+![image](https://i.imgur.com/oyh1lxM.gif)
+
 ## How to work with alexis
 ```bash
 npm i alexis
@@ -8,24 +11,22 @@ npm i alexis
 ```javascript
 let Ig = require('alexis');
 
-/* login by pass */
-let ig = new Ig();
-ig.getSession({ username: 'username', password: 'password' }, result => {
-  console.log(result);
-})
 
 /* Or login by session */
 let ig = new Ig({ sessionID, csrfToken });
-
-})    
+ 
     
 ```
 
 ### Actions
 ```javascript
 
+  let ig = new Ig();
+  
   (async() => {
-    
+    /* login */
+     let x = await ig.loginByPassword({ username: 'your uname', password: 'password' })
+
     /* get your tl media */
       let x = ig.getTimeLineMedia();
     /* end of get */
