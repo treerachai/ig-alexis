@@ -12,7 +12,11 @@
   "author": "alfathdirk",
   "license": "MIT",
   "dependencies": {
+    "image-size": "^0.6.3",
     "minimist": "^1.2.0",
-    "prompt": "^1.0.0"
+    "prompt": "^1.0.0",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2",
+    "uuid": "^3.3.2"
   }
 }
