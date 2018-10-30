@@ -1,5 +1,5 @@
 const InstagramAPI = require('./lib/instagram');
-
+const InstagramUpload = require('./lib/upload');
 class Instagram extends InstagramAPI{
 
   constructor(userSession) {
@@ -113,4 +113,7 @@ class Instagram extends InstagramAPI{
   }
 }
 
-module.exports = Instagram;
+module.exports = {
+  Instagram,
+  InstagramUpload
+};
